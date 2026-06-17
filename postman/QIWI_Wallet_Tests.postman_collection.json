@@ -1,0 +1,87 @@
+{
+  "info": {
+    "name": "QIWI Wallet Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://edge.qiwi.com", "type": "string" },
+    { "key": "wallet", "value": "79123456789", "type": "string" },
+    { "key": "token", "value": "your_bearer_token_here", "type": "string" },
+    { "key": "recipient", "value": "79281633806", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "1. Проверка доступности сервиса",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/person-profile/v1/profile/current",
+          "host": ["{{baseUrl}}"],
+          "path": ["person-profile", "v1", "profile", "current"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2. Проверка баланса",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/person-profile/v1/profile/current",
+          "host": ["{{baseUrl}}"],
+          "path": ["person-profile", "v1", "profile", "current"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "3. Создание платежа (перевод на кошелёк)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sum\": {\n    \"amount\": 1,\n    \"currency\": \"643\"\n  },\n  \"paymentMethod\": {\n    \"type\": \"Account\",\n    \"accountId\": \"643\"\n  },\n  \"fields\": {\n    \"account\": \"{{recipient}}\"\n  },\n  \"comment\": \"Тестовый перевод 1 рубль\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/isinap/api/v2/terms/99/payments",
+          "host": ["{{baseUrl}}"],
+          "path": ["isinap", "api", "v2", "terms", "99", "payments"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "4. Исполнение платежа (проверка статуса)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Accept", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/payment-history/v2/persons/{{wallet}}/payments?rows=1&operation=OUT",
+          "host": ["{{baseUrl}}"],
+          "path": ["payment-history", "v2", "persons", "{{wallet}}", "payments"],
+          "query": [
+            { "key": "rows", "value": "1" },
+            { "key": "operation", "value": "OUT" }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
