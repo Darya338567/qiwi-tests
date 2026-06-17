@@ -1,0 +1,11 @@
+{
+  "name": "qiwi-playwright-tests",
+  "version": "1.0.0",
+  "description": "Автотесты для QIWI Wallet API",
+  "scripts": {
+    "test": "npx playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  }
+}
